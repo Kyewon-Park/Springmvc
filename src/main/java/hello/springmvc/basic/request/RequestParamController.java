@@ -1,8 +1,10 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -71,6 +73,28 @@ public class RequestParamController {
     public String requestParamMap(@RequestParam MultiValueMap<String, Object> paramMap) {
         log.info("username={}, age={}", paramMap.get("username"),
                 paramMap.get("age"));
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@RequestParam String username,
+                                   @RequestParam Integer age) {
+        HelloData helloData = new HelloData();
+        helloData.setUsername(username);
+        helloData.setAge(age);
+
+        log.info("helloData={}",helloData);
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1-2")
+    public String modelAttributeV12(@ModelAttribute HelloData helloData) {
+        //HelloData 객체를 만들고
+        //Getter Setter를 찾는다. 여기서는 setter를 호출해서 파라미터 값을 입력(바인딩)한다.
+        //파라미터 이름이 username이면 setUsername()메서드를 찾아 호출.
+        log.info("helloData={}",helloData);
         return "ok";
     }
 }
